@@ -13,3 +13,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Bid {
+  id            String      @id @default(cuid())
+  nftMint       String 
+  buyer         String
+  price         Decimal
+  currency      String      @default("SOL")
+  marketplace   String
+  signature     String
+  timestamp     DateTime    @default(now())
+
+  nft           NFT         @relation(fields: [nftMint] , references: [mint] , onDelete: Cascade) 
+}
+
+model NFT {
+  id          String    @default(cuid())
+  mint        String    @id 
+  name        String?
+  imageUrl    String?
+  collection  String?
+  bids        Bid[]
+}
